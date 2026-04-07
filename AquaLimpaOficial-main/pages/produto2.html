@@ -13,11 +13,19 @@
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col">
+  <script>
+    function voltarOuRedirecionar() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "nossos_produtos.html";
+      }
+    }
+  </script>
 
   <header class="bg-blue-800 px-6 py-6 flex items-center justify-between shadow-md">
    
-    <button onclick="history.back()" class="text-black">
-      <a href="index.html"><button class="btn-entrar"></button></a>
+    <button onclick="voltarOuRedirecionar()" class="text-white hover:text-gray-300 transition duration-200" aria-label="Voltar">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>

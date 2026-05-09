@@ -4,113 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aqua Limpa - Login</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Arial", sans-serif;
-      background-color: #fef6f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-      width: 350px;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .title span:first-child {
-      color: #1e90ff; /* Azul */
-    }
-
-    .title span:last-child {
-      color: #32cd32; /* Verde */
-    }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .link {
-      font-size: 12px;
-      margin-top: 10px;
-      text-align: left;
-    }
-
-    .link a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-
-    .link a:hover {
-      text-decoration: underline;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #1e90ff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      margin-top: 25px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0b6cd4;
-    }
-
-    .social-login {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .social-login img {
-      width: 32px;
-      height: 32px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 <body>
-  <form action="../index.html" method="GET">
+  <form action="../backend/login.php" method="POST">
     <div class="container">
       <h1 class="title"><span>AQUA</span> <span>LIMPA</span></h1>
 
       <label for="email">E-MAIL OU USUÁRIO</label>
-      <input type="text" id="email" name="email" placeholder="Insira seu texto">
+      <input type="text" id="email" name="email" placeholder="Insira seu texto" required>
 
       <label for="senha">SENHA</label>
-      <input type="password" id="senha" name="senha" placeholder="Insira seu texto">
+      <input type="password" id="senha" name="senha" placeholder="Insira seu texto" required>
 
       <div class="link">
         <a href="criarconta.html">Não tem conta? Clique Aqui</a>
@@ -122,6 +27,17 @@
         <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook">
       </div>
     </div>
+    <input type="hidden" name="csrf_token" id="csrf_token">
   </form>
+  <script>
+    fetch("../backend/csrf.php", { credentials: "same-origin" })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.csrf_token) {
+          const el = document.getElementById("csrf_token");
+          if (el) el.value = data.csrf_token;
+        }
+      });
+  </script>
 </body>
 </html>

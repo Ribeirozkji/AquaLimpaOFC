@@ -4,81 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aqua Limpa - Cadastro</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Arial", sans-serif;
-      background-color: #fef6f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-      width: 350px;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .azul {
-      color: #1e90ff;
-    }
-
-    .verde {
-      color: #32cd32;
-    }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #1e90ff;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      margin-top: 25px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0b6cd4;
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 <body>
   <div class="container">
     <h1><span class="azul">AQUA</span> <span class="verde">LIMPA</span></h1>
 
-   <form action="../backend/cadastro.php" method="POST">
-
+    <form action="../backend/cadastro.php" method="POST">
       <label for="nome">NOME DO USUÁRIO</label>
       <input type="text" id="nome" name="nome" placeholder="Insira seu texto" required>
 
@@ -89,10 +21,21 @@
       <input type="email" id="email" name="email" placeholder="Insira seu texto" required>
 
       <label for="senha">SENHA</label>
-      <input type="password" id="senha" name="senha" placeholder="Insira seu texto" required>
+      <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" minlength="8" required>
 
       <button type="submit" class="btn-cadastrar">Cadastrar</button>
+      <input type="hidden" name="csrf_token" id="csrf_token">
     </form>
   </div>
+  <script>
+    fetch("../backend/csrf.php", { credentials: "same-origin" })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.csrf_token) {
+          const el = document.getElementById("csrf_token");
+          if (el) el.value = data.csrf_token;
+        }
+      });
+  </script>
 </body>
 </html>

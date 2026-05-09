@@ -89,10 +89,21 @@
       <input type="email" id="email" name="email" placeholder="Insira seu texto" required>
 
       <label for="senha">SENHA</label>
-      <input type="password" id="senha" name="senha" placeholder="Insira seu texto" required>
+      <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" minlength="8" required>
 
       <button type="submit" class="btn-cadastrar">Cadastrar</button>
+          <input type="hidden" name="csrf_token" id="csrf_token">
     </form>
   </div>
+  <script>
+    fetch("../backend/csrf.php", { credentials: "same-origin" })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.csrf_token) {
+          const el = document.getElementById("csrf_token");
+          if (el) el.value = data.csrf_token;
+        }
+      });
+  </script>
 </body>
 </html>

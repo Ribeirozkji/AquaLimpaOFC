@@ -1,5 +1,6 @@
 <?php
-require 'conexao.php';
+
+require_once __DIR__ . '/conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -7,11 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $nome = trim($_POST['nome'] ?? '');
-$dtnasc = $_POST['data_nascimento'] ?? null;
+$dtnasc = trim($_POST['data_nascimento'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $senha = $_POST['senha'] ?? '';
 
-if ($nome === '' || $email === '' || $senha === '' || $dtnasc === null || $dtnasc === '') {
+if ($nome === '' || $dtnasc === '' || $email === '' || $senha === '') {
     http_response_code(422);
     exit('Erro: preencha todos os campos obrigatórios.');
 }
@@ -28,6 +29,7 @@ if (strlen($senha) < 8) {
 
 $checkSql = 'SELECT id FROM usuario WHERE email = ? LIMIT 1';
 $checkStmt = mysqli_prepare($conexao, $checkSql);
+
 if (!$checkStmt) {
     error_log('Erro ao preparar verificação de e-mail: ' . mysqli_error($conexao));
     http_response_code(500);
@@ -43,9 +45,11 @@ if (mysqli_stmt_num_rows($checkStmt) > 0) {
     http_response_code(409);
     exit('Erro: e-mail já cadastrado.');
 }
+
 mysqli_stmt_close($checkStmt);
 
 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
 $sql = 'INSERT INTO usuario (nome, dtnasc, email, senha) VALUES (?, ?, ?, ?)';
 $stmt = mysqli_prepare($conexao, $sql);
 
@@ -57,14 +61,14 @@ if (!$stmt) {
 
 mysqli_stmt_bind_param($stmt, 'ssss', $nome, $dtnasc, $email, $senhaHash);
 
-if (mysqli_stmt_execute($stmt)) {
+if (!mysqli_stmt_execute($stmt)) {
+    error_log('Erro ao cadastrar usuário: ' . mysqli_error($conexao));
     mysqli_stmt_close($stmt);
-    header('Location: ../pages/login.html');
-    exit;
+    http_response_code(500);
+    exit('Erro interno. Tente novamente mais tarde.');
 }
 
-error_log('Erro ao cadastrar: ' . mysqli_error($conexao));
 mysqli_stmt_close($stmt);
-http_response_code(500);
-exit('Erro interno. Tente novamente mais tarde.');
-?>
+
+header('Location: ../pages/login.html');
+exit;

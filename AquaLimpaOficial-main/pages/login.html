@@ -122,6 +122,17 @@
         <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook">
       </div>
     </div>
-  </form>
+        <input type="hidden" name="csrf_token" id="csrf_token">
+    </form>
+  <script>
+    fetch("../backend/csrf.php", { credentials: "same-origin" })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.csrf_token) {
+          const el = document.getElementById("csrf_token");
+          if (el) el.value = data.csrf_token;
+        }
+      });
+  </script>
 </body>
 </html>

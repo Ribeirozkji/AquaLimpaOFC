@@ -7,36 +7,45 @@
   <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 <body>
-  <form action="../backend/login.php" method="POST">
-    <div class="container">
+  <main class="container">
+    <form action="../backend/login.php" method="POST">
       <h1 class="title"><span>AQUA</span> <span>LIMPA</span></h1>
 
-      <label for="email">E-MAIL OU USUÁRIO</label>
-      <input type="text" id="email" name="email" placeholder="Insira seu texto" required>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
 
-      <label for="senha">SENHA</label>
-      <input type="password" id="senha" name="senha" placeholder="Insira seu texto" required>
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
 
-      <div class="link">
-        <a href="criarconta.html">Não tem conta? Clique Aqui</a>
-      </div>
+      <input type="hidden" name="csrf_token" id="csrf_token">
+
       <button type="submit" class="btn-entrar">Entrar</button>
 
-      <div class="social-login">
-        <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" alt="Google">
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook">
+      <div class="link">
+        <a href="criarconta.html">Não tem conta? Clique aqui</a>
       </div>
-    </div>
-    <input type="hidden" name="csrf_token" id="csrf_token">
-  </form>
+
+      <div class="social-login" aria-label="Opções de login social">
+        <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" alt="Login com Google">
+        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Login com Facebook">
+      </div>
+    </form>
+  </main>
+
   <script>
     fetch("../backend/csrf.php", { credentials: "same-origin" })
-      .then(r => r.json())
+      .then(response => response.json())
       .then(data => {
         if (data && data.csrf_token) {
-          const el = document.getElementById("csrf_token");
-          if (el) el.value = data.csrf_token;
+          const csrfInput = document.getElementById("csrf_token");
+
+          if (csrfInput) {
+            csrfInput.value = data.csrf_token;
+          }
         }
+      })
+      .catch(() => {
+        console.error("Não foi possível carregar o token CSRF.");
       });
   </script>
 </body>

@@ -7,34 +7,42 @@
   <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
 <body>
-  <div class="container">
+  <main class="container">
     <h1><span class="azul">AQUA</span> <span class="verde">LIMPA</span></h1>
 
     <form action="../backend/cadastro.php" method="POST">
-      <label for="nome">NOME DO USUÁRIO</label>
-      <input type="text" id="nome" name="nome" placeholder="Insira seu texto" required>
+      <label for="nome">Nome do usuário</label>
+      <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
 
-      <label for="data">DATA DE NASCIMENTO</label>
-      <input type="date" id="data" name="data_nascimento" required>
+      <label for="data_nascimento">Data de nascimento</label>
+      <input type="date" id="data_nascimento" name="data_nascimento" required>
 
-      <label for="email">EMAIL</label>
-      <input type="email" id="email" name="email" placeholder="Insira seu texto" required>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
 
-      <label for="senha">SENHA</label>
+      <label for="senha">Senha</label>
       <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" minlength="8" required>
 
-      <button type="submit" class="btn-cadastrar">Cadastrar</button>
       <input type="hidden" name="csrf_token" id="csrf_token">
+
+      <button type="submit" class="btn-cadastrar">Cadastrar</button>
     </form>
-  </div>
+  </main>
+
   <script>
     fetch("../backend/csrf.php", { credentials: "same-origin" })
-      .then(r => r.json())
+      .then(response => response.json())
       .then(data => {
         if (data && data.csrf_token) {
-          const el = document.getElementById("csrf_token");
-          if (el) el.value = data.csrf_token;
+          const csrfInput = document.getElementById("csrf_token");
+
+          if (csrfInput) {
+            csrfInput.value = data.csrf_token;
+          }
         }
+      })
+      .catch(() => {
+        console.error("Não foi possível carregar o token CSRF.");
       });
   </script>
 </body>
